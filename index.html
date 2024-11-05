@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Drowsiness Detection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        header {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .container {
+            display: flex;
+            justify-content: space-around;
+            width: 80%;
+            margin: 0 auto;
+        }
+        .section {
+            width: 45%;
+            margin: 10px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="file"] {
+            margin-bottom: 10px;
+            padding: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        img {
+            max-width: 100%;
+            margin-top: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .prediction {
+            margin-top: 10px;
+            font-size: 18px;
+            color: #333;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+    </style>
+    <script>
+        function startCamera() {
+            fetch('/start_camera', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'Camera started') {
+                        document.getElementById('video_feed').src = '/video_feed';
+                    }
+                });
+        }
+
+        function stopCamera() {
+            fetch('/stop_camera', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'Camera stopped') {
+                        document.getElementById('video_feed').src = '';
+                    }
+                });
+        }
+    </script>
+</head>
+<body>
+    <header>
+        Drowsiness Detection
+    </header>
+    <div class="container">
+        <div class="section">
+            <h2>Upload Image and get Prediction</h2>
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <label for="file">Upload Image:</label>
+                <input type="file" name="file" id="file">
+                <button type="submit">Upload</button>
+            </form>
+            {% if prediction %}
+                <div class="prediction">
+                    <h3>Prediction: {{ prediction }}</h3>
+                    <img src="{{ image_path }}" alt="Uploaded Image">
+                </div>
+            {% endif %}
+        </div>
+        <div class="section">
+            <h2>Live Video Feed</h2>
+            <div class="button-group">
+                <button onclick="startCamera()">Go Live</button>
+                <button onclick="stopCamera()">Stop Live</button>
+            </div>
+            <img id="video_feed" alt="Live Video Feed">
+        </div>
+    </div>
+</body>
+</html>
