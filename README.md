@@ -25,4 +25,4 @@ This application employs a pre-trained deep learning model to detect drowsiness 
 app.py 📜 - Main Flask application file containing routes and core logic. <br/>
 driver_drowsiness_detection.h5 🧠 - Pre-trained Keras model for eye state classification. <br/>
 static/uploads 📂 - Directory to store uploaded images. <br/>
-templates/index.html 🌐 - Main HTML template for the web interface. <br/>
+templates/index.html 🌐 - Main HTML template for the web interface...... <br/>
